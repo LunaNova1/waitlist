@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Participants</title>
+    <style>
+        body {
+            text-align: center;
+            color: white
+        }
+        table {
+            margin: 0 auto;
+            color: white
+            font-size: 30px
+
+        }
+        .center {
+            text-align: center;
+            list-style-position: inside;
+            padding-inline-start: 0;
+        }
+
+        h1 {
+            font-size: 60px;
+            color: white
+
+        }
+
+        .btn {
+            font-size: 30px;
+            border: 2px solid black;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            display: inline-block;
+            padding: 10px 50px;
+            background-color: white;
+        }
+
+        .container {
+            text-align: center;
+
+            font-size: 30px;
+
+        }
+
+        body {
+            background-color: #663399;
+        }
+    </style>
+
+
+
+</head>
+ <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<body>
+
+<h1>{{name}} Waitlist</h1>
+<h3 class = "center">{{room_id}}</h3>
+
+<a href="/waitlist/{{room_id}}/host">Back</a>
+<a href="/waitlist/{{room_id}}/host/end">End</a>
+
+<script>
+   function update_table() {
+        axios.get('/waitlist/{{room_id}}>/host/view')
+            .then(function (response) {
+                // handle success
+                var wait = response.data;
+                document.getElementById("table").innerHTML = "<tr><th>ID</th></tr>" + "<tr><th>Name</th></tr>" + "<tr><th>Priority</th></tr>"
+                for (var i = 0; i < wait.length; i++) {
+                    document.getElementById("table").innerHTML += "<td>" + wait[i][0] + '</td>' + "<td>" + wait[i][1] + '</td>' + "<td>" + wait[i][2] + '</td><td><a href="/waitlist/{{ room_id }}/host/' + wait[i][0] + '/delete">delete</a></td></tr>'
+                }
+
+            })
+    }
+
+    setInterval(function () {
+        update_table()
+    }, 2000)
+</script>
+
+
+<table border="1" id = "table">
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Priority</th>
+
+    </tr>
+    {% for row in participants %}
+    <tr>
+        <td>{{ row[0] }}</td>
+        <td>{{ row[1] }}</td>
+        <td>{{ row[2] }}</td>
+        <td><a href="/waitlist/{{ room_id }}/host/{{ row[0] }}/delete">delete</a></td>
+    </tr>
+    {% endfor %}
+
+
+</table>
+
+
+<!-- TODO 1: выведи список всех дисков в виде таблицы http://htmlbook.ru/html/table -->
+<!-- TODO 2: для каждой позиции добавь ссылки на изменение и удаление
+
+</body>
+</html>
